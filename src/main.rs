@@ -14,7 +14,7 @@ const DELIM: &str = " ";
 const USAGE: &str = r#"usage: msel [OPTIONS] text...
 options:
     -h              print this help message and exit
-    -d              change the output delimiter (todo)"#;
+    -d              change the output delimiter"#;
 
 use msel;
 use std::io::{stdout, Write};
@@ -32,23 +32,29 @@ fn usage() {
 
 fn parse_args() -> Config {
     let argv: Vec<String> = env::args().collect();
+    let mut delim: String = String::from(DELIM);
 
     if argv.len() == 1 {
         usage();
     }
 
-    let possible_flags = ["-h"];
     let mut items: Vec<String> = vec![];
+    let mut n = 1;
 
-    for (_n, a) in argv[1..].iter().enumerate() {
-        if a == "-h" {
+    while n != argv.len() {
+        let a = argv[n].to_string();
+        if a == "-d" {
+            delim = argv[n+1].to_string();
+            n += 1;
+        } else if a == "-h" {
             usage();
-        } else if !possible_flags.contains(&a.as_str()) {
+        } else {
             items.push(a.to_string());
         }
+        n += 1;
     }
 
-    Config { delim: DELIM.to_string(), items: items }
+    Config { delim: delim, items: items }
 }
 
 fn main() {
@@ -58,7 +64,7 @@ fn main() {
 
     for (n, i) in items.sel_items.iter().enumerate() {
         print!("{}", i);
-        if n != items.sel_items.len() { print!("{}", config.delim); }
+        if n != items.sel_items.len() - 1 { print!("{}", config.delim); }
         stdout().flush()
                 .unwrap();
     }
