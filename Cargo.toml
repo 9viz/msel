@@ -1,0 +1,8 @@
+[package]
+name = "msel"
+version = "0.1.0"
+authors = ["viz <https://github.com/vizs>"]
+edition = "2018"
+
+[dependencies]
+termion = "1.5.1"
