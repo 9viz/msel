@@ -43,13 +43,10 @@ fn parse_args() -> Config {
 
     while n != argv.len() {
         let a = argv[n].to_string();
-        if a == "-d" {
-            delim = argv[n+1].to_string();
-            n += 1;
-        } else if a == "-h" {
-            usage();
-        } else {
-            items.push(a.to_string());
+        match a.as_str() {
+            "-d" => { delim = argv[n+1].to_string(); n += 1; },
+            "-h" => usage(),
+            _ => items.push(a.to_string()),
         }
         n += 1;
     }
