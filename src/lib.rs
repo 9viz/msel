@@ -72,7 +72,7 @@ pub mod ui {
         let nitms  = aitems.len() - 1;
 
         /* disable cursor */
-        write!(stdout, "\n\r{}select:", cursor::Hide).unwrap();
+        write!(stdout, "\n\r{}", cursor::Hide).unwrap();
 
         for _ in 0..nitms {
             write!(stdout, "\n").unwrap();
@@ -93,7 +93,7 @@ pub mod ui {
                 let cur_item = aitems.get(n)
                                      .unwrap();
                 /* highlighted item */
-                write!(stdout, "\t").unwrap();
+                write!(stdout, "\t\t").unwrap();
                 if items.sel_items.contains(cur_item) {
                     write!(stdout, "{}", style::Bold).unwrap();
                 }
