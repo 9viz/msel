@@ -34,7 +34,7 @@ fn parse_args() -> Config {
     let argv: Vec<String> = env::args().collect();
     let mut delim: String = String::from(DELIM);
 
-    if argv.len() == 1 {
+    if argv.len() == 1 || argv[1] == "-h" {
         usage();
     }
 
@@ -45,7 +45,6 @@ fn parse_args() -> Config {
         let a = argv[n].to_string();
         match a.as_str() {
             "-d" => { delim = argv[n+1].to_string(); n += 1; },
-            "-h" => usage(),
             _ => items.push(a.to_string()),
         }
         n += 1;
