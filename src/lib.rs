@@ -2,6 +2,8 @@
  * -- lib.rs
  * msel
  * by viz (https://github.com/vizs)
+ *
+ * licensed under BSD 2-Clause "Simplified" License
  */
 pub struct Items {
     pub all_items: Vec<String>,
