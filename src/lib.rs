@@ -95,7 +95,7 @@ pub mod ui {
                 /* highlighted item */
                 write!(stdout, "\t\t").unwrap();
                 if items.sel_items.contains(cur_item) {
-                    write!(stdout, "{}", style::Bold).unwrap();
+                    write!(stdout, "{}", style::Invert).unwrap();
                 }
 
                 if cur == n {
