@@ -1,0 +1,52 @@
+ msel
+======
+
+select multiple items in a tui and echo it to stdout/file
+
+the way tui works make it impossible to use msel like this:
+    `echo $(msel option1 option2 option3)`
+when you do that, you do not see a tui at all. to prevent
+that, you should rather do: `msel option1 option2... | cat`
+note: using echo instead of cat makes msel panic. this might
+      be fixed later. (soon TM)
+
+note:
+     if the number of options exceeds your terminal's LINES
+     var or if there are a LOT of options, you will not have
+     a fun time selecting things since the ui sucks right now.
+     all the tui libs I tried were too bare or didn't work in
+     musl because proc-macro doesn't compile in musl :(
+
+ controls
+==========
+
+the controls are simple. a vi-like and emacs-like controls
+are offered.
+
+j/C-n    => down
+k/C-p    => up
+space    => select
+esc/C-c  => exit
+g        => go to first option
+G        => go to last option
+
+ flags
+=======
+
+usage: msel [OPTIONS] text...
+options:
+    -h              print this help message and exit
+    -d              change the output delimiter
+    -f              change the output file path (default stdout)
+
+ license
+=========
+
+licensed under BSD 2-Clause "Simplified" License
+
+ thanks
+========
+
+the ui is a modified version of list view of inquirer-rs
+the source code of inquirer-rs can be found here:
+    https://github.com/Munksgaard/inquirer-rs

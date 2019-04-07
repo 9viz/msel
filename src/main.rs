@@ -16,7 +16,7 @@ const USAGE: &str = r#"usage: msel [OPTIONS] text...
 options:
     -h              print this help message and exit
     -d              change the output delimiter
-    -f              change the output file path"#;
+    -f              change the output file path (default stdout)"#;
 
 use msel;
 use std::{env, process::exit, fs};

@@ -136,6 +136,14 @@ pub mod ui {
                 Key::Char(' ') => {
                     items.add_rm_sel(aitems.get(cur).unwrap());
                 }
+                /* first element */
+                Key::Char('g') => {
+                    cur = 0;
+                }
+                /* last element */
+                Key::Char('G') => {
+                    cur = nitms;
+                }
                 /* something else */
                 _ => {}
             }
