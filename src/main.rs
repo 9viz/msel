@@ -1,7 +1,7 @@
 /*
  * msel - select multiple items as arguments/from stdin (todo)
- * and echo all the selections to a file in
- * a space separated list.
+ * and echo all the selections to a file or stdout in
+ * a space (/delim chosen) separated list.
  *
  * made by viz (https://github.com/vizs)
  *
@@ -11,7 +11,7 @@
  */
 
 const DELIM: &str = " ";
-const OFILE: &str = "/tmp/msel.out";
+const OFILE: &str = "";
 const USAGE: &str = r#"usage: msel [OPTIONS] text...
 options:
     -h              print this help message and exit
@@ -20,6 +20,7 @@ options:
 
 use msel;
 use std::{env, process::exit, fs};
+use std::io::{stdout, Write};
 
 struct Config {
     delim: String,
@@ -71,9 +72,15 @@ fn main() {
         }
     }
 
-    fs::write(&config.out, &result)
-        .unwrap_or_else(|_| {
-            eprintln!("error: couldn't write to out file!");
-            exit(1);
-        });
+    if config.out.as_str() == "" {
+        print!("{}", result);
+        stdout().flush()
+                .unwrap();
+    } else {
+        fs::write(&config.out, &result)
+            .unwrap_or_else(|_| {
+                eprintln!("error: couldn't write to out file!");
+                exit(1);
+            });
+    }
 }
