@@ -17,6 +17,13 @@ note:
      all the tui libs I tried were too bare or didn't work in
      musl because proc-macro doesn't compile in musl :(
 
+to install, you need cargo and make.
+    make
+    make clean install
+
+if you don't want to use make, then run
+    cargo install --path ./
+
  controls
 ==========
 
