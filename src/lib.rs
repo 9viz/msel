@@ -128,7 +128,7 @@ pub mod ui {
                     else { cur -= 1; }
                 }
                 /* exit loop */
-                Key::Esc|Key::Ctrl('c') => {
+                Key::Esc|Key::Ctrl('c')|Key::Ctrl('q') => {
                     write!(stdout, "\n\r{}", cursor::Show).unwrap();
                     break;
                 }
@@ -137,11 +137,11 @@ pub mod ui {
                     items.add_rm_sel(aitems.get(cur).unwrap());
                 }
                 /* first element */
-                Key::Char('g') => {
+                Key::Char('g')|Key::Alt('<') => {
                     cur = 0;
                 }
                 /* last element */
-                Key::Char('G') => {
+                Key::Char('G')|Key::Alt('>') => {
                     cur = nitms;
                 }
                 /* something else */

@@ -4,7 +4,7 @@
 select multiple items in a tui and echo it to stdout/file
 
 the way tui works make it impossible to use msel like this:
-    `echo $(msel option1 option2 option3)`
+    echo $(msel option1 option2 option3)
 when you do that, you do not see a tui at all. to prevent
 that, you should rather do: `msel option1 option2... | cat`
 note: using echo instead of cat makes msel panic. this might
@@ -30,12 +30,12 @@ if you don't want to use make, then run
 the controls are simple. a vi-like and emacs-like controls
 are offered.
 
-j/C-n    => down
-k/C-p    => up
-space    => select
-esc/C-c  => exit
-g        => go to first option
-G        => go to last option
+j/C-n      => down
+k/C-p      => up
+space      => select
+esc/C-c/q  => exit
+g/M-<      => go to first option
+G/M->      => go to last option
 
  flags
 =======
