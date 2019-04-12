@@ -51,9 +51,9 @@ impl Items {
 pub mod ui {
     extern crate termion;
 
-    use std::io::{stdout, Write, stdin};
+    use std::io::{Write, stdin};
     use super::Items;
-    use termion::{input::TermRead, event::Key,raw::IntoRawMode};
+    use termion::{input::TermRead, event::Key, raw::IntoRawMode};
     use termion::{style, cursor, clear};
 
     /*
@@ -65,17 +65,17 @@ pub mod ui {
      * the sel_items vector
      */
     pub fn run(items: &mut Items) {
-        let mut stdout = stdout().into_raw_mode()
-                                 .unwrap();
+        let mut screen = termion::get_tty().unwrap()
+                                           .into_raw_mode()
+                                           .unwrap();
         let stdin  = stdin();
         let aitems = items.get_items();
         let nitms  = aitems.len() - 1;
 
-        /* disable cursor */
-        write!(stdout, "\n\r{}", cursor::Hide).unwrap();
+        write!(screen, "\n\r{}", cursor::Hide).unwrap();
 
         for _ in 0..nitms {
-            write!(stdout, "\n").unwrap();
+            write!(screen, "\n").unwrap();
         }
 
         /* the cursor position variable */
@@ -85,28 +85,28 @@ pub mod ui {
 
         /* the main loop */
         loop {
-            print!("{}", cursor::Up((nitms + 1) as u16));
+            write!(screen, "\r\x1b[K").unwrap();
+            write!(screen, "{}", cursor::Up((nitms + 1) as u16)).unwrap();
 
             for (n, item) in aitems.iter().enumerate() {
-                write!(stdout, "\n\r{}", clear::CurrentLine).unwrap();
+                write!(screen, "\n\r{}", clear::CurrentLine).unwrap();
 
                 let cur_item = aitems.get(n)
                                      .unwrap();
-                /* highlighted item */
-                write!(stdout, "\t\t").unwrap();
-                if items.sel_items.contains(cur_item) {
-                    write!(stdout, "{}", style::Invert).unwrap();
-                }
 
-                if cur == n {
-                    write!(stdout, ">{}{}", item, style::Reset).unwrap();
-                } else {
-                    write!(stdout, "{}{}", item, style::Reset).unwrap();
+                write!(screen, "\t\t").unwrap();
+
+                if items.sel_items.contains(cur_item) {
+                    write!(screen, "{}", style::Invert).unwrap();
                 }
+                if cur == n {
+                    /* highlighted item */
+                    write!(screen, ">").unwrap();
+                }
+                    write!(screen, "{}{}", item, style::Reset).unwrap();
             }
 
-            stdout.lock()
-                  .flush()
+            screen.flush()
                   .unwrap();
 
             /*  get input */
@@ -129,7 +129,6 @@ pub mod ui {
                 }
                 /* exit loop */
                 Key::Esc|Key::Ctrl('c')|Key::Ctrl('q') => {
-                    write!(stdout, "\n\r{}", cursor::Show).unwrap();
                     break;
                 }
                 /* space for selecting */
@@ -148,8 +147,7 @@ pub mod ui {
                 _ => {}
             }
         }
-
-        write!(stdout, "\n\r{}", cursor::Show).unwrap();
+        write!(screen, "\r\n\r{}{}", cursor::Show, clear::All).unwrap();
     }
 }
 

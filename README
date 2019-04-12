@@ -3,13 +3,6 @@
 
 select multiple items in a tui and echo it to stdout/file
 
-the way tui works make it impossible to use msel like this:
-    echo $(msel option1 option2 option3)
-when you do that, you do not see a tui at all. to prevent
-that, you should rather do: `msel option1 option2... | cat`
-note: using echo instead of cat makes msel panic. this might
-      be fixed later. (soon TM)
-
 note:
      if the number of options exceeds your terminal's LINES
      var or if there are a LOT of options, you will not have
@@ -57,3 +50,10 @@ licensed under BSD 2-Clause "Simplified" License
 the ui is a modified version of list view of inquirer-rs
 the source code of inquirer-rs can be found here:
     https://github.com/Munksgaard/inquirer-rs
+
+you can directly pipe stuff from msel thanks to:
+    ym555   https://github.com/ym1234
+    steve   https://github.com/buffet
+    diamond https://github.com/diamondburned
+from r/unixporn server
+
