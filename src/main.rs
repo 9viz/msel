@@ -12,11 +12,15 @@
 
 const DELIM: &str = " ";
 const OFILE: &str = "";
+const PRE:   &str = "";
+const SUF:   &str = "";
 const USAGE: &str = r#"usage: msel [OPTIONS] text...
 options:
     -h              print this help message and exit
     -d              change the output delimiter
-    -f              change the output file path (default stdout)"#;
+    -f              change the output file path (default stdout)
+    -p              set the prefix before each selection
+    -s              set the suffix after each selection"#;
 
 use msel;
 use std::{env, process::exit, fs};
@@ -26,6 +30,8 @@ struct Config {
     delim: String,
     items: Vec<String>,
     out: String,
+    prefix: String,
+    suffix: String,
 }
 
 fn usage() {
@@ -36,7 +42,9 @@ fn usage() {
 fn parse_args() -> Config {
     let argv: Vec<String> = env::args().collect();
     let mut delim: String = String::from(DELIM);
-    let mut out: String = String::from(OFILE);
+    let mut out: String   = String::from(OFILE);
+    let mut pre: String   = String::from(PRE);
+    let mut suf: String   = String::from(SUF);
 
     if argv.len() == 1 || argv[1] == "-h" {
         usage();
@@ -50,12 +58,14 @@ fn parse_args() -> Config {
         match a.as_str() {
             "-d" => { delim = argv[n+1].to_string(); n += 1; },
             "-f" => { out = argv[n+1].to_string(); n += 1; },
-            _ => items.push(a.to_string()),
+            "-p" => { pre = argv[n+1].to_string(); n += 1; },
+            "-s" => { suf = argv[n+1].to_string(); n += 1; },
+            _    => items.push(a.to_string()),
         }
         n += 1;
     }
 
-    Config { delim: delim, items: items, out: out }
+    Config { delim: delim, items: items, out: out, prefix: pre, suffix: suf }
 }
 
 fn main() {
@@ -66,7 +76,12 @@ fn main() {
     let mut result: String = String::new();
 
     for (n, i) in items.sel_items.iter().enumerate() {
-        result.push_str(i);
+        result.push_str(
+                        &format!("{}{}{}",
+                                 config.prefix,
+                                 i,
+                                 config.suffix)
+                       );
         if n != items.sel_items.len() - 1 {
             result.push_str(&format!("{}", config.delim));
         }

@@ -85,7 +85,9 @@ pub mod ui {
 
         /* the main loop */
         loop {
+            /* delete the previous text */
             write!(screen, "\r\x1b[K").unwrap();
+            /* move up back to the start */
             write!(screen, "{}", cursor::Up((nitms + 1) as u16)).unwrap();
 
             for (n, item) in aitems.iter().enumerate() {
@@ -147,7 +149,7 @@ pub mod ui {
                 _ => {}
             }
         }
-        write!(screen, "\r\n\r{}{}", cursor::Show, clear::All).unwrap();
+        write!(screen, "\n\r{}", cursor::Show).unwrap();
     }
 }
 

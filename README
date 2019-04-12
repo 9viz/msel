@@ -38,6 +38,8 @@ options:
     -h              print this help message and exit
     -d              change the output delimiter
     -f              change the output file path (default stdout)
+    -p              set the prefix before each selection
+    -s              set the suffix after each selection
 
  license
 =========
