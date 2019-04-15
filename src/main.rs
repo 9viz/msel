@@ -14,13 +14,15 @@ const DELIM: &str = " ";
 const OFILE: &str = "";
 const PRE:   &str = "";
 const SUF:   &str = "";
+const SORT:  bool = false;
 const USAGE: &str = r#"usage: msel [OPTIONS] text...
 options:
     -h              print this help message and exit
     -d              change the output delimiter
     -f              change the output file path (default stdout)
     -p              set the prefix before each selection
-    -s              set the suffix after each selection"#;
+    -s              set the suffix after each selection
+    -S              sort the output"#;
 
 use msel;
 use std::{env, process::exit, fs};
@@ -32,6 +34,7 @@ struct Config {
     out: String,
     prefix: String,
     suffix: String,
+    sort: bool,
 }
 
 fn usage() {
@@ -45,6 +48,7 @@ fn parse_args() -> Config {
     let mut out: String   = String::from(OFILE);
     let mut pre: String   = String::from(PRE);
     let mut suf: String   = String::from(SUF);
+    let mut sort: bool    = SORT;
 
     if argv.len() == 1 || argv[1] == "-h" {
         usage();
@@ -56,16 +60,17 @@ fn parse_args() -> Config {
     while n != argv.len() {
         let a = argv[n].to_string();
         match a.as_str() {
-            "-d" => { delim = argv[n+1].to_string(); n += 1; },
-            "-f" => { out = argv[n+1].to_string(); n += 1; },
-            "-p" => { pre = argv[n+1].to_string(); n += 1; },
-            "-s" => { suf = argv[n+1].to_string(); n += 1; },
-            _    => items.push(a.to_string()),
+            "-d" => { delim = argv[n+1].to_string(); n += 1; }
+            "-f" => { out = argv[n+1].to_string(); n += 1; }
+            "-p" => { pre = argv[n+1].to_string(); n += 1; }
+            "-s" => { suf = argv[n+1].to_string(); n += 1; }
+            "-S" => { sort = true }
+            _    =>   items.push(a.to_string())
         }
         n += 1;
     }
 
-    Config { delim: delim, items: items, out: out, prefix: pre, suffix: suf }
+    Config { delim: delim, items: items, out: out, prefix: pre, suffix: suf, sort: sort }
 }
 
 fn main() {
@@ -74,6 +79,10 @@ fn main() {
     msel::ui::run(&mut items);
 
     let mut result: String = String::new();
+
+    if config.sort {
+        items.sel_items.sort();
+    }
 
     for (n, i) in items.sel_items.iter().enumerate() {
         result.push_str(
