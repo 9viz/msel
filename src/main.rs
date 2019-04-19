@@ -75,6 +75,7 @@ fn parse_args() -> Config {
 
 fn main() {
     let config = parse_args();
+    let mut delim = config.delim;
     let mut items = msel::Items::new(&config.items);
     msel::ui::run(&mut items);
 
@@ -82,6 +83,14 @@ fn main() {
 
     if config.sort {
         items.sel_items.sort();
+    }
+
+    if delim.starts_with("\\") {
+        match delim.as_str() {
+            "\\n" => { delim = "\n".to_string() }
+            "\\t" => { delim = "\t".to_string() }
+            _     => {}
+        }
     }
 
     for (n, i) in items.sel_items.iter().enumerate() {
@@ -92,7 +101,7 @@ fn main() {
                                  config.suffix)
                        );
         if n != items.sel_items.len() - 1 {
-            result.push_str(&format!("{}", config.delim));
+            result.push_str(&format!("{}", delim));
         }
     }
 

@@ -79,7 +79,7 @@ pub fn run(items: &mut Items) {
                 else { cur -= 1; }
             }
             /* exit loop */
-            Key::Esc|Key::Ctrl('c')|Key::Ctrl('q') => {
+            Key::Esc|Key::Ctrl('c')|Key::Char('q') => {
                 break;
             }
             /* space for selecting */
